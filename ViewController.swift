@@ -1,219 +1,96 @@
 //
 //  ViewController.swift
-//  calculator
+//  TermProject
 //
-//  Created by kpu on 2016. 3. 21..
+//  Created by kpu on 2016. 5. 28..
 //  Copyright © 2016년 SUNGJUN CHO. All rights reserved.
 //
 
+
 import UIKit
+import Alamofire
+import AlamofireXmlToObjects
+import EVReflection
+import XMLDictionary
 
-
-
-class ViewController: UIViewController {
-    
-    
-    var Result: Double = 0
-    var tempValueString: String = ""
-    
-    var expressionString: String = ""
-    var resultString: String = ""
-    var myResultDynamicArray:[Double] = []
-    var myExpressionsDynamicArray:[String] = []
-
-    @IBOutlet weak var expressionOutlet: UILabel!
-    
-    @IBOutlet weak var resultOutlet: UILabel!
-    @IBAction func C(sender: AnyObject) {
-        Result = 0;
-        expressionString = ""
-        tempValueString = ""
-        myResultDynamicArray.removeAll()
-        myExpressionsDynamicArray.removeAll()
-        invalidateExpression()
-        invalidateResult()
-    }
-    
-    
-    @IBAction func divide(sender: AnyObject) {
-        expressionString+="/"
-        invalidateExpression()
-        myExpressionsDynamicArray.append("/")
-        pressExpressionButton()
-    }
-    
-    
-    @IBAction func multiple(sender: AnyObject) {
-        expressionString+="*"
-        invalidateExpression()
-        myExpressionsDynamicArray.append("*")
-        pressExpressionButton()
-    }
-    
-    
-    @IBAction func sub(sender: AnyObject) {
-        expressionString+="-"
-        invalidateExpression()
-        myExpressionsDynamicArray.append("-")
-        pressExpressionButton()
-    }
-    
-    @IBAction func plus(sender: AnyObject) {
-        expressionString+="+"
-        invalidateExpression()
-        myExpressionsDynamicArray.append("+")
-        pressExpressionButton()
-    }
-    
-    @IBAction func equal(sender: AnyObject) {
-        pressExpressionButton()
-        if myResultDynamicArray.capacity == 0
-        {
-            return
-        }
-        var tempValue = myResultDynamicArray[0]
-        var temp = myResultDynamicArray
-        var temp2 = myExpressionsDynamicArray
-        for var i = 0; i < myResultDynamicArray.count; ++i {
-            if (i+1) == myResultDynamicArray.count
-            {
-                break;
-            }
-            let tempString = myExpressionsDynamicArray[i]
-            let tempInt = myResultDynamicArray[i+1]
-            switch tempString{
-            case "+":
-                tempValue += tempInt
-                break;
-                
-            case "-":
-                tempValue -= tempInt
-                break;
-
-            case "*":
-                tempValue *= tempInt
-                break;
-
-            case "/":
-                tempValue /= tempInt
-                break;
-            default:
-                break;
-                
-            }
-            
-        }
-        Result = tempValue
-        invalidateResult()
-        Result = 0;
-        expressionString = ""
-        tempValueString = ""
-        myResultDynamicArray.removeAll()
-        myExpressionsDynamicArray.removeAll()
-    }
-    
-    @IBAction func seven(sender: AnyObject) {
-        expressionString+="7"
-        tempValueString+="7"
-        invalidateExpression()
-    }
-    
-    
-    @IBAction func eight(sender: AnyObject) {
-        expressionString+="8"
-        tempValueString+="8"
-        invalidateExpression()
-    }
-    
-    
-    @IBAction func nine(sender: AnyObject) {
-        expressionString+="9"
-        tempValueString+="9"
-        invalidateExpression()
-    }
-    
-    @IBAction func four(sender: AnyObject) {
-        expressionString+="4"
-        tempValueString+="4"
-        invalidateExpression()
-    }
-    
-    @IBAction func five(sender: AnyObject) {
-        expressionString+="5"
-        tempValueString+="5"
-        invalidateExpression()
-    }
-    
-    
-    @IBAction func six(sender: AnyObject) {
-        expressionString+="6"
-        tempValueString+="6"
-        invalidateExpression()
-    }
-    
-    @IBAction func one(sender: AnyObject) {
-        expressionString+="1"
-        tempValueString+="1"
-        invalidateExpression()
-    }
-    
-    @IBAction func two(sender: AnyObject) {
-        expressionString+="2"
-        tempValueString+="2"
-        invalidateExpression()
-    }
-    
-    @IBAction func three(sender: AnyObject) {
-        expressionString+="3"
-        tempValueString+="3"
-        invalidateExpression()
-    }
-    
-    @IBAction func zero(sender: AnyObject) {
-        expressionString+="0"
-        tempValueString+="0"
-        invalidateExpression()
-    }
-    
-    func invalidateExpression(){
-        expressionOutlet.text = expressionString
-    }
-    
-    func invalidateResult(){
-        resultOutlet.text = Result.description
-    }
-    
-    func pressExpressionButton(){
-        if tempValueString == ""
-        {
-            return
-        }
-        let myNumber = NSNumberFormatter().numberFromString(tempValueString)
-        myResultDynamicArray.append(myNumber!.doubleValue)
-        tempValueString = ""
-    }
-    
-    func calculateValue(temp : Int){
-        
-    }
-    
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        
-        Result = 0;
-        expressionString = ""
-        tempValueString = ""
-        invalidateExpression()
-        invalidateResult()
-        
-        // Do any additional setup after loading the view, typically from a nib.
-    }
-
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
-    }
-
-
+class cmmMsgHeaderCls : EVObject{
+    var requestMsgId : String?
+    var responseMsgId : String?
+    var responseTime : String?
+    var successYN : String?
+    var returnCode : String?
+    var errMsg : String?
+    var totalCount : String?
+    var countPerPage : String?
+    var totalPage : String?
+    var currentPage : String?
 }
 
+class NewAddressListResponse : EVObject{
+    var cmmMsgHeader : cmmMsgHeaderCls = cmmMsgHeaderCls()
+    var newAddressListAreaCd: [NewAddressListAreaCdCls] = [NewAddressListAreaCdCls]()
+}
+
+class NewAddressListSingleResponse : EVObject{
+    var cmmMsgHeader : cmmMsgHeaderCls = cmmMsgHeaderCls()
+    var newAddressListAreaCd: NewAddressListAreaCdCls = NewAddressListAreaCdCls()
+}
+
+class NewAddressListAreaCdCls : EVObject{
+    var zipNo : String?
+    var lnmAdres : String?
+    var rnAdres : String?
+}
+
+
+
+
+class ViewController: UIViewController, UITableViewDataSource {
+    
+    @IBOutlet weak var searchField: UITextField! // 텍스트 입력받는 부분.
+    @IBOutlet weak var segmentedControl: UISegmentedControl!
+    @IBOutlet weak var tableView: UITableView!
+    var ResultHeader: cmmMsgHeaderCls!
+    var ResultArray: [NewAddressListAreaCdCls] = [NewAddressListAreaCdCls]() // 주소 결과 저장위해
+   
+    var segment : String = "dong"
+    var segueIndexRow : Int? //내가 받아온 검색해서 나온 결과들을 클릭을 해서 맵을 찾아야 되는데, 몇번째 테이블뷰인지를 인덱스값에 저장하는거
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        //EVReflection.setBundleIdentifier(NewAddressListAreaCdCls)
+    }
+    
+    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return ResultArray.count //테이블뷰 전체에 몇개의 요소가 들어가는지 결정하려고 씀
+    }
+    
+    func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell { //각셀에 들어갈 내용을 결정하는 함수.
+        let cell: UITableViewCell = UITableViewCell(style: UITableViewCellStyle.Default, reuseIdentifier: nil)
+       
+        
+        let zipNo = ResultArray[indexPath.row].zipNo
+        let lnmAdres = ResultArray[indexPath.row].lnmAdres // 도로명주소
+        let rnAdres = ResultArray[indexPath.row].rnAdres // 지번주소
+        cell.textLabel?.numberOfLines = 0
+        cell.textLabel?.lineBreakMode = NSLineBreakMode.ByWordWrapping
+        cell.textLabel?.text = "우편번호 : " + zipNo! + "\n지번주소 : " + lnmAdres! + "\n도로명 주소 : " + rnAdres!
+        return cell
+    }
+
+    @IBAction func indexChanged(sender: UISegmentedControl) {
+        
+        switch segmentedControl.selectedSegmentIndex
+        {
+        case 0:
+            segment = "dong"; 
+        case 1:
+            segment = "road";
+        case 2:
+            segment = "post";
+        default:
+            break;
+        }
+    
+}
+
+ 
