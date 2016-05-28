@@ -93,6 +93,78 @@ class ViewController: UIViewController, UITableViewDataSource {
     
 }
 
-    @IBAction func onSearchbuttonClick(sender: UIButton) {} //검색버튼 눌렀을때 
+    @IBAction func onSearchbuttonClick(sender: UIButton) { //검색버튼 눌렀을때 호출
+        
+        let paras : [String:String] = //
+            [
+                "serviceKey": "ex0TP/ZK4NEE1l6dFzEuRW3kIOemE+ENUaP7XQGsYWHSjB8AMIk5PxnJmBSoBOyTCxMipm8KW6f0MyHTtzJbYA==",//서비스키 디코드한것.
+                "searchSe": segment, //
+                "srchwrd": searchField.text!, //검색하고싶은 단어 넣는 곳.
+                "countPerPage": "10", //한페이지에 몇개까지 볼 수 있게
+                "currentPage": "1" //현재 보이고 있는 페이지
+        ]
+        
+        let URL = "http://openapi.epost.go.kr/postal/retrieveNewAdressAreaCdService/retrieveNewAdressAreaCdService/getNewAddressListAreaCd" //쿼리 보내기 전까지의 유알엘
+        
+            
+        override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject!) {//세그가 불리기 전에 먼저 함수 호출을 한다 . 세그는 넘어가는 동작. 뷰가 넘어가는 ㅈ동작
+            
+            let destinationVC = segue.destinationViewController as! MapViewController //가는 곳의 클래스를 받아온거
+            destinationVC.AddressData = ResultArray[segueIndexRow!].lnmAdres
+        }
+        
+        @IBAction func unwindToVC(segue: UIStoryboardSegue) {
+        }
+        
+        func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+            segueIndexRow = indexPath.row
+            self.performSegueWithIdentifier("playerSegue", sender: self)
+        }
+
+        
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
  
