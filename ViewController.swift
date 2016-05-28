@@ -41,7 +41,7 @@ class NewAddressListAreaCdCls : EVObject{
     var lnmAdres : String?
     var rnAdres : String?
 }
-
+/////
 
 
 
