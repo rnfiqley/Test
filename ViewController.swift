@@ -65,7 +65,7 @@ class ViewController: UIViewController, UITableViewDataSource {
     }
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell { //각셀에 들어갈 내용을 결정하는 함수.
-        let cell: UITableViewCell = UITableViewCell(style: UITableViewCellStyle.Default, reuseIdentifier: nil)
+       let cell: UITableViewCell = tableView.dequeueReusableCellWithIdentifier("AddressCell",forIndexPath: indexPath)
        
         
         let zipNo = ResultArray[indexPath.row].zipNo
@@ -92,5 +92,7 @@ class ViewController: UIViewController, UITableViewDataSource {
         }
     
 }
+
+    @IBAction func onSearchbuttonClick(sender: UIButton) {} //검색버튼 눌렀을때 
 
  
