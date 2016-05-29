@@ -121,7 +121,19 @@ class ViewController: UIViewController, UITableViewDataSource {
             self.performSegueWithIdentifier("playerSegue", sender: self)
         }
 
-        
+        func Request(url: String, param: [String:String]){
+            Alamofire.request(.GET, url, parameters:param).responseObject { (response: Result<NewAddressListSingleResponse,NSError>)in
+                
+                if let result = response.value {
+                    self.ResultArray.append(result.newAddressListAreaCd)
+                    self.tableView.reloadData() //갱신
+                } else {
+                    print("Error")
+                }
+            }
+            
+        }
+
 
 }
 
