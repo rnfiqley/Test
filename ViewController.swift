@@ -1,10 +1,3 @@
-//
-//  ViewController.swift
-//  TermProject
-//
-//  Created by kpu on 2016. 5. 28..
-//  Copyright © 2016년 SUNGJUN CHO. All rights reserved.
-//
 
 
 import UIKit
@@ -100,8 +93,6 @@ class ViewController: UIViewController, UITableViewDataSource {
                 "serviceKey": "ex0TP/ZK4NEE1l6dFzEuRW3kIOemE+ENUaP7XQGsYWHSjB8AMIk5PxnJmBSoBOyTCxMipm8KW6f0MyHTtzJbYA==",//서비스키 디코드한것.
                 "searchSe": segment, //
                 "srchwrd": searchField.text!, //검색하고싶은 단어 넣는 곳.
-                "countPerPage": "10", //한페이지에 몇개까지 볼 수 있게
-                "currentPage": "1" //현재 보이고 있는 페이지
         ]
         
         let URL = "http://openapi.epost.go.kr/postal/retrieveNewAdressAreaCdService/retrieveNewAdressAreaCdService/getNewAddressListAreaCd" //쿼리 보내기 전까지의 유알엘
@@ -121,7 +112,7 @@ class ViewController: UIViewController, UITableViewDataSource {
             self.performSegueWithIdentifier("playerSegue", sender: self)
         }
 
-        func Request(url: String, param: [String:String]){
+        func singleRequest(url: String, param: [String:String]){
             Alamofire.request(.GET, url, parameters:param).responseObject { (response: Result<NewAddressListSingleResponse,NSError>)in
                 
                 if let result = response.value {
@@ -133,6 +124,19 @@ class ViewController: UIViewController, UITableViewDataSource {
             }
             
         }
+        
+        func multipleRequest(url: String, param: [String:String]){
+            Alamofire.request(.GET, url, parameters:param).responseObject { (response: Result<NewAddressListResponse,NSError>)in
+                
+                if let result = response.value {
+                    self.tableView.reloadData() //갱신
+                } else {
+                    print("Error")
+                }
+            }
+            
+        }
+
 
 
 }
